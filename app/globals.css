@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+button{
+  border: solid black 1px;
+}
+h1{
+  text-align: center;
+  font: 700 16px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+.input{
+  border: solid black 1px;
+}
+.flexRow{
+  display: flex;
+  flex-direction: row;
+}
