@@ -6,7 +6,7 @@ import {useContext} from "react";
 import {GlobalContext} from "@/app/providers/GlobalProvider";
 
 export default  function Filter() {
-const {name,wiek,login,miasto,from0To100,changeFilter}=useContext(GlobalContext)
+const {name,wiek,login,miasto,from0To100}=useContext(GlobalContext)
     // console.log(name)
     return (<div style={{display:"flex", flexDirection:"column"}}>
         <h1>Filter</h1>
@@ -20,6 +20,6 @@ const {name,wiek,login,miasto,from0To100,changeFilter}=useContext(GlobalContext)
         <option value={1}>Asc</option>
         <option value={0}>Desc</option>
         </select></div>
-    <button onClick={()=>changeFilter(false)}>Not use Filter</button>
+
     </div>)
 }

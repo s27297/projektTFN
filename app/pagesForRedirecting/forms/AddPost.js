@@ -5,21 +5,21 @@ import * as Yup from "yup";
 import {useContext} from "react";
 import {GlobalContext} from "@/app/providers/GlobalProvider";
 
-export default function Login(){
-    const {logIn,changePage}=useContext(GlobalContext)
+export default function AddPost(){
+    const {postRequests}=useContext(GlobalContext)
     return(
         <div>
             <Formik
                 initialValues={{
-                    login: "",
-                    password: "",
+                    header: "",
+                    text: "",
                 }}
                 validationSchema={Yup.object({
 
-                    login: Yup.string()
-                        .required("Login jest wymagany"),
-                    password: Yup.string()
-                        .required("Haslo jest wymagane"),
+                    header: Yup.string()
+                        .required("Header jest wymagany"),
+                    text: Yup.string()
+                        .required("Text jest wymagany"),
 
 
                 })}
@@ -27,7 +27,7 @@ export default function Login(){
 
 
                     // console.log(values)
-                    logIn(values)
+                    postRequests("Post",values)
                     resetForm()
                 }}
 
@@ -38,22 +38,20 @@ export default function Login(){
                         backgroundColor: "yellow", justifyContent: "center", border: "solid black 1px", margin: "10%"
                     }}>
 
-                        <Field type="text" name="login" placeholder="napisz login"
+                        <Field type="text" name="header" placeholder="napisz header"
                         />
-                        <ErrorMessage name="login" component="div"/>
+                        <ErrorMessage name="header" component="div"/>
                         <br/>
-                        <Field type="password" name="password" placeholder="napisz haslo"
+                        <Field type="text" name="text" placeholder="napisz text"
                         />
-                        <ErrorMessage name="password" component="div"/>
+                        <ErrorMessage name="text" component="div"/>
                         <br/>
                         <button type="submit" disabled={!dirty || !isValid}
-                        >Log In
+                        >Add new post
                         </button>
                     </Form>)}
 
             </Formik>
-            <button style={{color: "blue",display:"block",margin:"auto"}} onClick={()=>changePage("signIn")}>
-                Nie masz konta: zaloguj sie</button>
         </div>
     )
 

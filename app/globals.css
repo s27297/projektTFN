@@ -33,4 +33,21 @@ h1{
 .flexRow{
   display: flex;
   flex-direction: row;
+  height: 100%;
+
+}
+.flexBox{
+  display: -ms-flexbox;
+}
+.scroll{
+  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.darkmode{
+  color: red;
+  background-color: #0a0a0a;
+
+}
+body{
 }
