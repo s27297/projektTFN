@@ -18,7 +18,7 @@ export default function Post({post}){
             deleteRequests("post",post._id)}/>}
         </div>
         <p>{post.text}</p>
-        <p>likes:{post.likes.length}</p>
+        {post.likes&&   <p>likes:{post.likes.length}</p>}
         <button onClick={() => putRequests("AddLike", post._id)}><FaThumbsUp style={{fontSize: "20px"}}/></button>
 
 

@@ -7,7 +7,7 @@ import {
     FaNewspaper,
     FaSignOutAlt,
     FaFrog,
-    FaFire,
+    FaFire, FaExclamation,
 } from "react-icons/fa";
 
 import {useContext} from "react";
@@ -21,7 +21,7 @@ export default function ShowComponentChanging() {
     if(user.darkmode===true){
         color = "black"
     }
-    return <div style={{backgroundColor: "blue",color:color}}>
+    return <div style={{backgroundColor: "blue", color: color}}>
 
         <button onClick={() => changePage("myPage")}><FaUserCircle style={{fontSize: "50px"}}/></button>
         <br/>
@@ -29,7 +29,7 @@ export default function ShowComponentChanging() {
         <br/>
         <button onClick={() => changePage("messages")}><FaComment style={{fontSize: "50px"}}/></button>
         <br/>
-        <button onClick={() => changePage("groups")}><FaUsersRectangle  style={{fontSize: "50px"}}/></button>
+        <button onClick={() => changePage("groups")}><FaUsersRectangle style={{fontSize: "50px"}}/></button>
         <br/>
         <button onClick={() => changePage("friends")}><FaUserFriends style={{fontSize: "50px"}}/></button>
         <br/>
@@ -39,6 +39,8 @@ export default function ShowComponentChanging() {
         <br/>
         <button onClick={() => changePage("myPosts")}><FaNewspaper style={{fontSize: "50px"}}/></button>
         <br/>
+        {user.Admin &&<div><button onClick={() => changePage("adminPage")}><FaExclamation style={{fontSize: "50px"}}/></button>
+            <br/></div>}
         <button onClick={() => logout()}><FaSignOutAlt style={{fontSize: "50px"}}/></button>
 
     </div>

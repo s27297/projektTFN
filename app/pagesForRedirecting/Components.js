@@ -27,6 +27,9 @@ import EditPost from "@/app/pagesForRedirecting/forms/EditPost";
 import AddEvent from "@/app/pagesForRedirecting/forms/AddEvent";
 import Events1 from "@/app/pagesForRedirecting/paging/Events1";
 import EditEvent from "@/app/pagesForRedirecting/forms/EditEvent";
+import AdminPage from "@/app/pagesForRedirecting/admin/AdminPage";
+import Raports from "@/app/pagesForRedirecting/admin/Raports";
+import TextsForBan from "@/app/pagesForRedirecting/admin/TextsForBan";
 
 export default function Components() {
 const {page,user}=useContext(GlobalContext)
@@ -65,6 +68,9 @@ const {page,user}=useContext(GlobalContext)
                     {page === "addEvent" && <AddEvent></AddEvent>}
 
 
+                    {page === "adminPage" && <AdminPage></AdminPage>}
+                    {page === "repports" && <Raports></Raports>}
+                    {page === "textsForBan" && <TextsForBan></TextsForBan>}
 
 
                 </div>

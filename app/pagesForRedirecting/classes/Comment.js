@@ -5,11 +5,11 @@ import {GlobalContext} from "@/app/providers/GlobalProvider";
 import {FaTrash} from "react-icons/fa";
 
 export default function Comment({comment,margin=0}){
-const {user,deleteRequests,changeTagged,changeEditCommit,changePage}=useContext(GlobalContext);
+const {user,deleteRequests,changeTagged,changeEditCommit,changePage,postRequests}=useContext(GlobalContext);
 // console.log(comment.tags);
 //     console.log(margin)
     return <div style={{marginLeft:margin}}>
-        {user._id===comment.user && <div>
+        {user._id===comment.user||user.Admin===true && <div>
             <button onClick={() => deleteRequests("comment", comment._id)}><FaTrash/></button>
             <button style={{marginLeft:"10px"}} onClick={() => {
                 changeEditCommit(comment);
@@ -18,6 +18,12 @@ const {user,deleteRequests,changeTagged,changeEditCommit,changePage}=useContext(
             </button>
         </div>
             }
+        {user._id!==comment.user && <div>
+            <button onClick={() => postRequests("Complain", {id:comment._id,text:comment.text,
+                postId:comment.post,userAsked:user._id,user:comment.user,commitId:comment._id})}>Ask to ban</button>
+
+        </div>
+        }
             <div className={"flexRow"}><p>Owner: {comment.user}</p>
                 <button onClick={() => changeTagged(comment)}>odpowedz nz komentarz</button>
             </div>

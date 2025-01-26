@@ -36,6 +36,10 @@ const [editCommit,setEditCommit]=useState({});
    const [editGroup,setEditGroup]=useState({});
     const [editPost,setEditPost]=useState({});
     const [editEvent,setEditEvent]=useState({});
+    const [reports,setReports]=useState([]);
+    const [textsForBan,setTextsForBan]=useState([]);
+
+
     const logIn=(values)=>{
         // console.log(token)
         const zaloguj=async (values) => {
@@ -324,6 +328,39 @@ const [editCommit,setEditCommit]=useState({});
                         })
                         .finally(setLoading(false))
                     break;
+                case "Reports":
+                    setLoading(true);
+                    await fetch(`http://localhost:5000/admin/reports`, {
+                        headers: {'Authorization': 'Bearer ' + token},
+                    }).then(res => res.json())
+                        .then(res => {
+                            // console.log(res)
+                            if (res.success ) {
+                                setReports(res.data)
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                        .finally(setLoading(false))
+                    break;
+                case "textsForBan":
+                    setLoading(true);
+                    await fetch(`http://localhost:5000/banned`, {
+                        headers: {'Authorization': 'Bearer ' + token},
+                    }).then(res => res.json())
+                        .then(res => {
+                            console.log(res)
+                            if (res.success ) {
+                                setTextsForBan(res.data)
+                            }
+                            else setTextsForBan([])
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                        .finally(setLoading(false))
+                    break;
 
 
             }
@@ -440,6 +477,23 @@ const [editCommit,setEditCommit]=useState({});
                             console.log(err)
                         })
                     break;
+                case "Complain":
+                    await fetch(`http://localhost:5000/banned/`, {
+                        method: "POST",
+                        headers: {'Authorization': 'Bearer ' + token,"Content-Type":"application/json"},
+                        body: JSON.stringify(value),
+                    }).then(res => res.json())
+                        .then(res => {
+                            console.log(res)
+                            if(res.success) {
+                                alert("your complain was sended succesfully")
+                            }
+                            else{alert("your complain was not sended succesfully")}
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                    break;
             }
         }
         postFunction(value,type)
@@ -489,7 +543,7 @@ const [editCommit,setEditCommit]=useState({});
                 case "Settings":
                     // console.log("cat")
                     // values=!darkMode
-                    console.log(values)
+                    // console.log(values)
                     await fetch(`http://localhost:5000/users/${user._id}/settings`, {
                         method:"PATCH",
                         headers: {'Authorization': 'Bearer ' + token,"Content-Type":"application/json"},
@@ -691,7 +745,14 @@ const [editCommit,setEditCommit]=useState({});
                     }).then(res => res.json())
                         .then(res => {
                             console.log(res)
-                            getRequests("PostComments")
+                            if(page==="post")
+                                getRequests("PostComments")
+                            else {
+                                if(res.success)
+                                    alert("comment deleted")
+                                else
+                                    alert(res.data)
+                            }
                         })
                         .catch((err) => {
                             console.log(err)
@@ -753,6 +814,24 @@ const [editCommit,setEditCommit]=useState({});
                         })
                     // .finally())
                     break;
+                case "TextForBan":
+                    await fetch(`http://localhost:5000/banned/${values}`, {
+                        method:"DELETE",
+                        headers: {'Authorization': 'Bearer ' + token},
+
+                    }).then(res => res.json())
+                        .then(res => {
+                            console.log(res)
+                            if(!res.success)
+                                alert(res.data)
+                            else
+                                getRequests("textsForBan")
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                    // .finally())
+                    break;
             }
         }
         deleteFunction(values,type)
@@ -761,7 +840,6 @@ const [editCommit,setEditCommit]=useState({});
     const changePage=(page,post=null)=>{
         if(page==="post") {
             setViewPost(post)
-        console.log("cat")
         }
         setPage(page);
     }
@@ -803,14 +881,13 @@ const changeMessageTo=user=>setMessageTo(user)
     const changeEditEvent=(tagged)=>setEditEvent(tagged)
     return (
         <GlobalContext.Provider value={{logIn,signIn,wiek,from0To100,changeFilter,filter,
-        changePage,page,user,getRequests,token,users,name,login,miasto,messages,loading,
+        changePage,page,user,getRequests,token,users,name,login,miasto,messages,loading,textsForBan,
             filteredUsers,changeFilteredUsers,viewUserProfile,changeViewUserProfile,putRequests,
 hidden,changeHidden,logout,tagged,changeTagged,editCommit,changeEditCommit,groups,editGroup,changeEditGroup,
         messageTo,changeMessageTo,postRequests,friends,deleteRequests,darkMode,posts,viewPost,comments,
-        editPost,changeEditPost,events,editEvent,changeEditEvent}}>
+        editPost,changeEditPost,events,editEvent,changeEditEvent,reports}}>
             {children}
         </GlobalContext.Provider>
     );
 }
 
-//8,13,14,16,(17),20,21
