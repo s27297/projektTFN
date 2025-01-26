@@ -14,7 +14,7 @@ export default function AllUsers() {
 
 
 // console.log("cat")
-    useEffect(()=>{
+    useLayoutEffect(()=>{
         getRequests("Users")
 
 

@@ -10,12 +10,20 @@ export default function MyPosts(){
     useEffect(()=>{
         getRequests("MyPosts");
     },[])
-    console.log(posts)
 if(loading) return <div>loading...</div>
     if(!posts.length) return <div><button onClick={()=>changePage("addPost")}>Dodaj post</button> <p>Nie masz postów</p> </div>
     return <div>
         <button onClick={() => changePage("addPost")}>Dodaj post</button><br/>
 
-        {posts.map((post,index)=><Post key={post._id} post={post}/>)}
+        {posts.map((post,index)=><div key={post._id}>
+            <Post key={post._id} post={post}/>
+            <div style={{justifyContent: "center"}}>
+                <button onClick={() => {
+                    console.log("cat")
+                    changePage("post", post)
+                }}>Zobacz komentarze
+                </button>
+            </div>
+        </div>)}
     </div>
 }

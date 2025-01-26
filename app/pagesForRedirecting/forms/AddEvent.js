@@ -5,22 +5,27 @@ import * as Yup from "yup";
 import {useContext} from "react";
 import {GlobalContext} from "@/app/providers/GlobalProvider";
 
-export default function AddPost(){
+export default function AddEvent() {
     const {postRequests}=useContext(GlobalContext)
     return(
         <div>
             <Formik
                 initialValues={{
-                    header: "",
-                    text: "",
+                    name:"",
+                    date:"" ,
+                    text:""
+
                 }}
                 validationSchema={Yup.object({
 
-                    header: Yup.string()
-                        .required("Header jest wymagany"),
-                    text: Yup.string()
-                        .required("Text jest wymagany")
-                        .min(3,"Text musi miec co najmniej 3 znaki"),
+
+                    name: Yup.string()
+                        .required("Name jest wymagany")
+                        .min(3,"Name musi miec co najmniej 3 znaki"),
+                    text:Yup.string()
+                        .required("opis eventa jest wymagany")
+                        .min(3,"opis eventa musi miec co najmniej 3 znaki"),
+                    date:Yup.date().required("data jest wymagana"),
 
 
                 })}
@@ -28,7 +33,7 @@ export default function AddPost(){
 
 
                     // console.log(values)
-                    postRequests("Post",values)
+                    postRequests("Event",values)
                     resetForm()
                 }}
 
@@ -38,17 +43,22 @@ export default function AddPost(){
                         alignItems: "center", display: "flex", flexDirection: "column",
                         backgroundColor: "yellow", justifyContent: "center", border: "solid black 1px", margin: "10%"
                     }}>
-
-                        <Field type="text" name="header" placeholder="napisz header"
+                        Name
+                        <Field type="text" name="name" placeholder="napisz nazwe eventa"
                         />
-                        <ErrorMessage name="header" component="div"/>
+                        <ErrorMessage name="name" component="div"/>
                         <br/>
-                        <Field type="text" name="text" placeholder="napisz text"
+                        Opis eventa
+                        <Field type="text" name="text" placeholder="napisz nazwe opis eventa"
                         />
                         <ErrorMessage name="text" component="div"/>
                         <br/>
+                        Data
+                        <Field type="datetime-local" name="date" placeholder="napisz nazwe groupy"
+                        />
+                        <ErrorMessage name="date" component="div"/>
                         <button type="submit" disabled={!dirty || !isValid}
-                        >Add new post
+                        >Add new event
                         </button>
                     </Form>)}
 

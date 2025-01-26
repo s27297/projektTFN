@@ -5,22 +5,21 @@ import * as Yup from "yup";
 import {useContext} from "react";
 import {GlobalContext} from "@/app/providers/GlobalProvider";
 
-export default function AddPost(){
-    const {postRequests}=useContext(GlobalContext)
+export default function EditGroup() {
+    const {putRequests,editGroup}=useContext(GlobalContext)
     return(
         <div>
             <Formik
                 initialValues={{
-                    header: "",
-                    text: "",
+                    name: editGroup.name,
+
                 }}
                 validationSchema={Yup.object({
 
-                    header: Yup.string()
-                        .required("Header jest wymagany"),
-                    text: Yup.string()
-                        .required("Text jest wymagany")
-                        .min(3,"Text musi miec co najmniej 3 znaki"),
+
+                    name: Yup.string()
+                        .required("Name jest wymagany")
+                        .min(3,"Name musi miec co najmniej 3 znaki"),
 
 
                 })}
@@ -28,7 +27,7 @@ export default function AddPost(){
 
 
                     // console.log(values)
-                    postRequests("Post",values)
+                    putRequests("Group",values)
                     resetForm()
                 }}
 
@@ -39,16 +38,13 @@ export default function AddPost(){
                         backgroundColor: "yellow", justifyContent: "center", border: "solid black 1px", margin: "10%"
                     }}>
 
-                        <Field type="text" name="header" placeholder="napisz header"
+                        <Field type="text" name="name" placeholder="napisz nazwe groupy"
                         />
-                        <ErrorMessage name="header" component="div"/>
-                        <br/>
-                        <Field type="text" name="text" placeholder="napisz text"
-                        />
-                        <ErrorMessage name="text" component="div"/>
+                        <ErrorMessage name="name" component="div"/>
+
                         <br/>
                         <button type="submit" disabled={!dirty || !isValid}
-                        >Add new post
+                        >Add new group
                         </button>
                     </Form>)}
 

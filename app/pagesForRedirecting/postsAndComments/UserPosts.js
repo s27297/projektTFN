@@ -16,6 +16,15 @@ export default function UserPosts(){
     if(!posts.length) return <div><p>ten user nie ma swoich postów</p> </div>
     return <div>
 
-        {posts.map((post,index)=><Post key={post._id} post={post}/>)}
+        {posts.map((post,index)=> <div key={post._id}>
+            <Post key={post._id} post={post}/>
+            <div style={{justifyContent: "center"}}>
+                <button onClick={() => {
+                    console.log("cat")
+                    changePage("post", post)
+                }}>Zobacz komentarze
+                </button>
+            </div>
+        </div>)}
     </div>
 }

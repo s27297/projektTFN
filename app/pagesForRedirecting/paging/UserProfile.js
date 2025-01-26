@@ -6,6 +6,7 @@ import {GlobalContext} from "@/app/providers/GlobalProvider";
 
 export default function UserProfile() {
     const {viewUserProfile,loading}=useContext(GlobalContext)
+    console.log(viewUserProfile)
     if(loading)
         return <div>loading...</div>
     return <div>

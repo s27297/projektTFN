@@ -2,10 +2,15 @@
 
 import {useContext, useEffect} from "react";
 import {GlobalContext} from "@/app/providers/GlobalProvider";
+import {FaComment} from "react-icons/fa";
+import WriteMessage from "@/app/pagesForRedirecting/forms/WriteMessage";
 
 export default function User({user1}){
-const {page,changePage,changeViewUserProfile,user,viewUserProfile,postRequests} = useContext(GlobalContext);
+const {page,changePage,changeViewUserProfile,user,viewUserProfile,postRequests,changeMessageTo,changeHidden,hidden} = useContext(GlobalContext);
 // console.log( page)
+
+
+
     return (
         <div style={{display: "block", margin: "auto", textAlign: "center", backgroundColor: "yellow"}}>
         { page==="allUsers" &&
@@ -22,6 +27,10 @@ const {page,changePage,changeViewUserProfile,user,viewUserProfile,postRequests} 
                         <p>Login:{user1.login}</p>
                         {user.login!==viewUserProfile.login &&  <p onClick={()=>postRequests("Add to friends",viewUserProfile.login)}
                            style={{marginLeft:"50px",border:"solid green, 3px", color:"green",backgroundColor:"wheat"}}>+</p>}
+                        <FaComment onClick={()=> {
+                            changeMessageTo(user1)
+                            changeHidden(false)
+                        }} style={{marginLeft :"10px",fontSize: "20px",color:"green"}}/>
                     </div>
 
                     <p>Id:{user1._id}</p>
@@ -36,6 +45,7 @@ const {page,changePage,changeViewUserProfile,user,viewUserProfile,postRequests} 
                    <div style={{justifyContent:"center"}}>
                     <button onClick={() => changePage("userPosts")}>Zobacz moi posty</button>
                    </div>
+                    {!hidden &&<WriteMessage />}
                 </div>}
         </div>
 

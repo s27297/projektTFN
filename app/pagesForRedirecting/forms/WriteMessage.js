@@ -16,7 +16,8 @@ export default function WriteMessage() {
             to:messageTo._id,
             text:input.value,
         }
-       postRequests("Message",object);
+        // console.log(messageTo)
+      postRequests("Message",object);
         setInput("")
 
     }

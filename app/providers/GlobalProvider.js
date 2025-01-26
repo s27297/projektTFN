@@ -19,6 +19,7 @@ export default function GlobalProvider({ children }) {
     const [login,setLogin] =useInput("");
     const [miasto,setMiasto] =useInput("");
     const [posts, setPosts] = useState([])
+    const [events,setEvents]=useState([]);
 
     const [viewUserProfile,setViewUserProfile]=useState({});
     const [filter,changeFilter]=useReducer(filter=>!filter,false);
@@ -27,8 +28,14 @@ export default function GlobalProvider({ children }) {
     const [darkMode,setDarkMode]=useState(false);
     const [viewPost,setViewPost]=useState({});
     const [comments,setComments]=useState([]);
-    // const [userPosts,setUserPosts]=useState("");
+   const [hidden,changeHidden]=useState(true);
+const [editCommit,setEditCommit]=useState({});
+   const [tagged,setTagged]=useState({});
+   const [groups,setGroups]=useState([]);
 
+   const [editGroup,setEditGroup]=useState({});
+    const [editPost,setEditPost]=useState({});
+    const [editEvent,setEditEvent]=useState({});
     const logIn=(values)=>{
         // console.log(token)
         const zaloguj=async (values) => {
@@ -55,6 +62,9 @@ export default function GlobalProvider({ children }) {
                     } else
                         alert(r.message);
                 })
+                 .then(async ()=>{
+                     }
+                 )
                 .catch(err => {console.log(err);alert("logowanie nie udalo")})
 
         }
@@ -62,6 +72,7 @@ export default function GlobalProvider({ children }) {
 
 
     }
+
     const signIn=async(values)=>{
         const sign=async (values) => {
             await fetch(`http://localhost:5000/users/register`,
@@ -84,6 +95,13 @@ export default function GlobalProvider({ children }) {
 
         }
         sign(values)
+    }
+
+    const logout=()=>{
+        setUser({}
+        )
+        setToken("");
+        changePage("logIn")
     }
 
     const getRequests=async (type,value=null)=>{
@@ -138,6 +156,8 @@ export default function GlobalProvider({ children }) {
                                 // console.log("qwer")
                               setFriends(res.data)
                             }
+                            else
+                                setFriends([])
                         })
                         .catch((err) => {
                             console.log(err)
@@ -170,7 +190,7 @@ export default function GlobalProvider({ children }) {
                     break;
                 case "Posts":
                     setLoading(true);
-                    // console.log(value)
+                    console.log(value)
                     // console.log(`http://localhost:5000/posts?user=${value}`)
                     await fetch(`http://localhost:5000/posts?user=${value}`, {
                         headers: {'Authorization': 'Bearer ' + token},
@@ -181,7 +201,7 @@ export default function GlobalProvider({ children }) {
                             if (res.success ) {
 
                                 setPosts(res.data)
-                                // setFriends(res.data)
+                                // setViewPost(res.data.filter(p=>p._id===viewPost._id)[0])
                             }
                             else {
                                 setPosts([])
@@ -193,7 +213,7 @@ export default function GlobalProvider({ children }) {
                         .finally(setLoading(false))
                     break;
                 case "MyPosts":
-
+                    console.log("qwe")
                     setLoading(true);
                     await fetch(`http://localhost:5000/posts`, {
                         headers: {'Authorization': 'Bearer ' + token},
@@ -217,23 +237,86 @@ export default function GlobalProvider({ children }) {
                         .finally(setLoading(false))
                     break;
                 case "PostComments":
-                    console.log("cat")
-                    setLoading(true);
+                    // console.log("cat")
+
                     await fetch(`http://localhost:5000/posts/${viewPost._id}/comments`, {
                         headers: {'Authorization': 'Bearer ' + token},
 
                     }).then(res => res.json())
                         .then(res => {
                             // console.log(res)
-                            console.log(res)
 
                             if (res.success ) {
-                               // setPosts(res.data)
-                                // setFriends(res.data)
+                                let comments21= res.data
+                                let commentsWithTags=[]
+                                comments21.map(comment =>{
+                                   if (comment.tagged)commentsWithTags.push(comment)})
+                                console.log(commentsWithTags)
+                                let commmmmmmmmit = comments21
+
+                                if(commentsWithTags.length>0){
+                                    commentsWithTags.reverse().map(async comment => {
+                                        let staryComment =
+                                            commmmmmmmmit.find(comment1 => comment1._id === comment.tagged)
+                                        if (staryComment) {
+                                            // let commeeeeeeeeeeeeeent = commmmmmmmmit.map(com => console.log(comment._id))
+                                            if (!staryComment.tags) staryComment.tags = [comment]
+                                            else {
+                                                staryComment.tags.reverse().push(comment);staryComment.tags.reverse()}
+                                            commmmmmmmmit.map(c=>c._id===staryComment._id?staryComment:c)
+                                            console.log(staryComment)
+                                        }
+                                    })
+
+                                }
+                                console.log(viewPost)
+                                setViewPost(posts.filter(p=>p._id===viewPost._id)[0])
+
+                                console.log(commmmmmmmmit)
+                                setComments(commmmmmmmmit.filter(comment => !commentsWithTags.includes(comment)))
                             }
                             else {
                                 setComments([])
 
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                    break;
+                case "Groups":
+                    // console.log("rat")\
+                    console.log(users)
+                    if(!users.length)
+                        await getRequests("Users");
+
+                    setLoading(true);
+                    await fetch(`http://localhost:5000/groups`, {
+                        headers: {'Authorization': 'Bearer ' + token},
+                    }).then(res => res.json())
+                        .then(async res => {
+
+                            if (res.success) {
+
+                                // console.log("qwer")
+                                setGroups(res.data)
+                            } else
+                                setGroups([])
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                        .finally(()=>setLoading(false))
+                    break;
+                case "Events":
+                    setLoading(true);
+                    await fetch(`http://localhost:5000/events`, {
+                        headers: {'Authorization': 'Bearer ' + token},
+                    }).then(res => res.json())
+                        .then(res => {
+                            // console.log(res)
+                            if (res.success ) {
+                                setEvents(res.data)
                             }
                         })
                         .catch((err) => {
@@ -252,14 +335,14 @@ export default function GlobalProvider({ children }) {
         const postFunction=async (value,type)=> {
             switch (type) {
                 case "Message":
+                    console.log(value)
                     await fetch(`http://localhost:5000/messages`, {
                         method: "POST",
                         headers: {'Authorization': 'Bearer ' + token,"Content-Type":"application/json"},
                         body: JSON.stringify(value),
                     }).then(res => res.json())
                         .then(res => {
-                            // console.log(res)
-                           // console.log(res.data)
+                           changeHidden(true)
                         })
                         .catch((err) => {
                             console.log(err)
@@ -294,10 +377,64 @@ export default function GlobalProvider({ children }) {
                         body: JSON.stringify(value),
                     }).then(res => res.json())
                         .then(res => {
+                            console.log(res)
                             if(res.success) {
                                 changePage("myPosts")
+                                console.log("car")
                             }
-                            else{alert(res.data)}
+                            else{alert(res.errors)}
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                    break;
+                case "comment":
+                    await fetch(`http://localhost:5000/posts/${viewPost._id}/comments`, {
+                        method: "POST",
+                        headers: {'Authorization': 'Bearer ' + token,"Content-Type":"application/json"},
+                        body: JSON.stringify({tagged:tagged._id,text:value}),
+                    }).then(res => res.json())
+                        .then(res => {
+                           console.log(res)
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                    setTagged({})
+                    console.log(page)
+              getRequests("PostComments")
+                    break;
+                case "Group":
+                    await fetch(`http://localhost:5000/groups`, {
+                        method: "POST",
+                        headers: {'Authorization': 'Bearer ' + token,"Content-Type":"application/json"},
+                        body: JSON.stringify(value),
+                    }).then(res => res.json())
+                        .then(res => {
+                            console.log(res)
+                            if(res.success) {
+                                changePage("groups")
+                                // console.log("car")
+                            }
+                            else{alert(res.errors)}
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                    break;
+                case "Event":
+                    await fetch(`http://localhost:5000/events`, {
+                        method: "POST",
+                        headers: {'Authorization': 'Bearer ' + token,"Content-Type":"application/json"},
+                        body: JSON.stringify(value),
+                    }).then(res => res.json())
+                        .then(res => {
+                            console.log(res)
+                            if(res.success) {
+                                changePage("events")
+                                // console.log("car")
+                            }
+                            else{alert(res.errors)}
                         })
                         .catch((err) => {
                             console.log(err)
@@ -347,7 +484,7 @@ export default function GlobalProvider({ children }) {
                         .catch((err) => {
                             console.log(err)
                         })
-                        .finally(getRequests("Friends"))
+                        .finally(()=>getRequests("Friends"))
                     break;
                 case "Settings":
                     // console.log("cat")
@@ -385,6 +522,7 @@ export default function GlobalProvider({ children }) {
                                 // setUser({...user,darkmode:values})
                                 // setDarkMode(values)
                                 getRequests("Posts",viewUserProfile._id)
+                                if(page==="post")getRequests("PostComments")
                             }
                             else
                                 alert(res.data)
@@ -393,27 +531,149 @@ export default function GlobalProvider({ children }) {
                         .catch((err) => {
                             console.log(err)
                         })
+                    .finally()
+                    break;
+                case "Comment":
+                    console.log("cat")
+
+                    await fetch(`http://localhost:5000/posts/${values.id}/comments`, {
+                        method:"PUT",
+                        headers: {'Authorization': 'Bearer ' + token,"content-type":"application/json"},
+                        body: JSON.stringify({text:values.text}),
+                    }).then(res => res.json())
+                        .then(res => {
+                            // console.log(res)
+                            if(!res.success)
+                                alert(res.data)
+                            else{
+                                console.log(viewPost)
+                                setTimeout(()=>setPage("post"),10)
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                        // .finally(getRequests("Friends"))
+                    break;
+                case "Group":
+                    console.log("cat")
+
+                    await fetch(`http://localhost:5000/groups/${editGroup._id}`, {
+                        method:"PUT",
+                        headers: {'Authorization': 'Bearer ' + token,"content-type":"application/json"},
+                        body: JSON.stringify(values),
+                    }).then(res => res.json())
+                        .then(res => {
+                            // console.log(res)
+                            if(!res.success)
+                                alert(res.data)
+                            else{
+                                // console.log(viewPost)
+                                setTimeout(()=>setPage("groups"),10)
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
                     // .finally(getRequests("Friends"))
+                    break;
+                    case "Add to group":
+                        console.log(values)
+
+                        await fetch(`http://localhost:5000/groups/${values.id}/members`, {
+                            method:"PATCH",
+                            headers: {'Authorization': 'Bearer ' + token,"content-type":"application/json"},
+                            body: JSON.stringify({member:values.member}),
+                        }).then(res => res.json())
+                            .then(res => {
+                                // console.log(res)
+                                if(!res.success)
+                                    alert(res.data)
+                                else{
+
+                                    getRequests("Groups")
+                                }
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
+                        .finally()
+                        break;
+                case "post":
+                    console.log("cat")
+
+                    await fetch(`http://localhost:5000/posts/${values.id}`, {
+                        method:"PUT",
+                        headers: {'Authorization': 'Bearer ' + token,"content-type":"application/json"},
+                        body: JSON.stringify(values),
+                    }).then(res => res.json())
+                        .then(res => {
+                            // console.log(res)
+                            if(!res.success)
+                                alert(res.data)
+                            else{
+                                console.log(viewPost)
+                                setTimeout(()=>setPage("myPosts"),10)
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                    // .finally(getRequests("Friends"))
+                    break;
+                case "attend in event":
+                    await fetch(`http://localhost:5000/events/${values.id}/attendees`, {
+                        method:"PATCH",
+                        headers: {'Authorization': 'Bearer ' + token,"content-type":"application/json"},
+                        body: JSON.stringify(values),
+                    }).then(res => res.json())
+                        .then(res => {
+                            if(!res.success)
+                                alert(res.data)
+                            else{
+                               getRequests("Events")
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                    break;
+                case "Event":
+                    await fetch(`http://localhost:5000/events/${values.id}`, {
+                        method:"PUT",
+                        headers: {'Authorization': 'Bearer ' + token,"content-type":"application/json"},
+                        body: JSON.stringify(values),
+                    }).then(res => res.json())
+                        .then(res => {
+                            if(!res.success)
+                                alert(res.data)
+                            else{
+                                changePage("events")
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
                     break;
             }
         }
         putFunction(values,type)
     }
-
+    //
     const deleteRequests= (type,values=null)=>{
         const deleteFunction=async (values,type)=> {
             console.log("cat")
 
             switch (type) {
                 case "Friend":
-                    console.log("cat")
+                    // console.log("cat")
 
                     await fetch(`http://localhost:5000/friends/${values}`, {
                         method:"DELETE",
                         headers: {'Authorization': 'Bearer ' + token},
                     }).then(res => res.json())
                         .then(res => {
-                            console.log(res)
+                            // console.log(res)
                         if(!res.success)
                                 alert(res.data)
 
@@ -423,10 +683,81 @@ export default function GlobalProvider({ children }) {
                         })
                         .finally(getRequests("Friends"))
                     break;
+                case "comment":
+
+                    await fetch(`http://localhost:5000/posts/${values}/comments`, {
+                        method:"DELETE",
+                        headers: {'Authorization': 'Bearer ' + token},
+                    }).then(res => res.json())
+                        .then(res => {
+                            console.log(res)
+                            getRequests("PostComments")
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                        // .finally())
+                    break;
+
+                case "member":
+
+                    await fetch(`http://localhost:5000/groups/${values.id}/members`, {
+                        method:"DELETE",
+                        headers: {'Authorization': 'Bearer ' + token,'content-type': 'application/json'},
+                        body: JSON.stringify(values),
+                    }).then(res => res.json())
+                        .then(res => {
+                    if(!res.success)
+                        alert(res.data)
+                            else
+                            getRequests("Groups")
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                    // .finally())
+                    break;
+                case "post":
+
+                    await fetch(`http://localhost:5000/posts/${values}`, {
+                        method:"DELETE",
+                        headers: {'Authorization': 'Bearer ' + token},
+
+                    }).then(res => res.json())
+                        .then(res => {
+                            if(!res.success)
+                                alert(res.data)
+                            else
+                                changePage("myPosts")
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                    // .finally())
+                    break;
+                case "Event":
+
+                    await fetch(`http://localhost:5000/events/${values}`, {
+                        method:"DELETE",
+                        headers: {'Authorization': 'Bearer ' + token},
+
+                    }).then(res => res.json())
+                        .then(res => {
+                            if(!res.success)
+                                alert(res.data)
+                            else
+                                getRequests("Events")
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                    // .finally())
+                    break;
             }
         }
         deleteFunction(values,type)
     }
+
     const changePage=(page,post=null)=>{
         if(page==="post") {
             setViewPost(post)
@@ -435,6 +766,8 @@ export default function GlobalProvider({ children }) {
         setPage(page);
     }
 
+    const changeEditCommit=(commit)=>setEditCommit(commit)
+    const changeEditPost=(commit)=>setEditPost(commit)
 const changeFilteredUsers =(us)=> {
     const filtruj=async()=>{
         // console.log(filter)
@@ -465,13 +798,19 @@ const changeFilteredUsers =(us)=> {
 }
 const changeViewUserProfile=(userr)=>{setViewUserProfile(userr)}
 const changeMessageTo=user=>setMessageTo(user)
-
+    const changeTagged=(tagged)=>setTagged(tagged)
+    const changeEditGroup=(tagged)=>setEditGroup(tagged)
+    const changeEditEvent=(tagged)=>setEditEvent(tagged)
     return (
         <GlobalContext.Provider value={{logIn,signIn,wiek,from0To100,changeFilter,filter,
         changePage,page,user,getRequests,token,users,name,login,miasto,messages,loading,
             filteredUsers,changeFilteredUsers,viewUserProfile,changeViewUserProfile,putRequests,
-        messageTo,changeMessageTo,postRequests,friends,deleteRequests,darkMode,posts,viewPost,comments}}>
+hidden,changeHidden,logout,tagged,changeTagged,editCommit,changeEditCommit,groups,editGroup,changeEditGroup,
+        messageTo,changeMessageTo,postRequests,friends,deleteRequests,darkMode,posts,viewPost,comments,
+        editPost,changeEditPost,events,editEvent,changeEditEvent}}>
             {children}
         </GlobalContext.Provider>
     );
 }
+
+//8,13,14,16,(17),20,21

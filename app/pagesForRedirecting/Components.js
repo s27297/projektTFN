@@ -19,32 +19,53 @@ import MyPosts from "@/app/pagesForRedirecting/postsAndComments/MyPosts";
 import AddPost from "@/app/pagesForRedirecting/forms/AddPost";
 import UserPosts from "@/app/pagesForRedirecting/postsAndComments/UserPosts";
 import ViewPost from "@/app/pagesForRedirecting/postsAndComments/ViewPost";
+import EditCommit from "@/app/pagesForRedirecting/forms/EditCommit";
+import Groups from "@/app/pagesForRedirecting/paging/Groups";
+import AddGroup from "@/app/pagesForRedirecting/forms/AddGroup";
+import EditGroup from "@/app/pagesForRedirecting/forms/EditGroup";
+import EditPost from "@/app/pagesForRedirecting/forms/EditPost";
+import AddEvent from "@/app/pagesForRedirecting/forms/AddEvent";
+import Events1 from "@/app/pagesForRedirecting/paging/Events1";
+import EditEvent from "@/app/pagesForRedirecting/forms/EditEvent";
 
 export default function Components() {
 const {page,user}=useContext(GlobalContext)
     // console.log(page);
     // console.log(user)
     return(
-        <div style={{height:'100%'}}>
+        <div style={{height:'100vh'}}>
             {page === "logIn" && <Login></Login>}
             {page === "signIn" && <SignIn></SignIn>}
             {user.login &&<div className="flexRow">
-                <div style={{width: "20%"}}>
+                <div style={{flex: "20"}}>
                     <ShowComponentChanging></ShowComponentChanging>
                 </div>
-                <div style={{width: "80%"}}>
+                <div style={{flex: "80"}}>
                     {page === "allUsers" && <AllUsers></AllUsers>}
                     {page === "myPage" && <MyPage></MyPage>}
                     {page === "userProfile" && <UserProfile></UserProfile>}
-                    {page === "editUserProfile" && <EditUserProfile></EditUserProfile>}
                     {page === "friends" && <Friends></Friends>}
                     {page === "settings" && <Settings></Settings>}
-                    {page === "addPost" && <AddPost></AddPost>}
                     {page === "myPosts" && <MyPosts></MyPosts>}
                     {page === "post" && <ViewPost></ViewPost>}
+                    {page === "events" && <Events1></Events1>}
+                    {page === "groups" && <Groups></Groups>}
                     {page === "userPosts" && <UserPosts></UserPosts>}
                     {page === "messages" && <div style={{display:"flex", height:"100%"}}><div style={{flex:"30%"}}> <Messages /></div>
-                       <div style={{backgroundColor:"red",flex:"70%"}}> <MessagesBetweenUsers /></div></div>}
+                        <div style={{backgroundColor:"red",flex:"70%"}}> <MessagesBetweenUsers /></div></div>}
+
+
+                    {page === "editUserProfile" && <EditUserProfile></EditUserProfile>}
+                    {page === "addPost" && <AddPost></AddPost>}
+                    {page === "editCommit" && <EditCommit></EditCommit>}
+                    {page === "editEvent" && <EditEvent></EditEvent>}
+                    {page === "addGroup" && <AddGroup></AddGroup>}
+                    {page === "editGroup" && <EditGroup></EditGroup>}
+                    {page === "editPost" && <EditPost></EditPost>}
+                    {page === "addEvent" && <AddEvent></AddEvent>}
+
+
+
 
                 </div>
             </div>}
