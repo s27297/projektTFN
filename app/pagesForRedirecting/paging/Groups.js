@@ -9,6 +9,7 @@ import Group from "@/app/pagesForRedirecting/classes/Group";
 
 export default function Groups() {
     const {groups,getRequests,loading,changePage,putRequests}=useContext(GlobalContext)
+    const dodajDoGrupy=useRef("")
 
 // console.log("cat")
     useEffect(()=>{

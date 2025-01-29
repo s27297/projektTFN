@@ -55,7 +55,7 @@ const {page,user}=useContext(GlobalContext)
                     {page === "groups" && <Groups></Groups>}
                     {page === "userPosts" && <UserPosts></UserPosts>}
                     {page === "messages" && <div style={{display:"flex", height:"100%"}}><div style={{flex:"30%"}}> <Messages /></div>
-                        <div style={{backgroundColor:"red",flex:"70%"}}> <MessagesBetweenUsers /></div></div>}
+                        <div style={{backgroundColor:"red", borderLeft:"solid green 1px",flex:"70%"}}> <MessagesBetweenUsers /></div></div>}
 
 
                     {page === "editUserProfile" && <EditUserProfile></EditUserProfile>}

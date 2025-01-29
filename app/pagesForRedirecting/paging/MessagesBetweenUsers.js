@@ -28,7 +28,7 @@ const filteredMessages=messages.filter(message=>
         return <div><p>nie ma wiadomosci</p>
             <WriteMessage/>
     </div>
-    return <div style={{backgroundColor:"red"}} className={"scroll"}>
+    return <div  className={"scroll"}>
         {filteredMessages.map(message=>(<Message key={message._id} message={message}/>))}
 
 

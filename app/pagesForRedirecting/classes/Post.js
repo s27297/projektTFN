@@ -7,7 +7,6 @@ import {FaPencil} from "react-icons/fa6";
 
 export default function Post({post}){
     const {putRequests,changePage,page,changeEditPost,user,deleteRequests}=useContext(GlobalContext);
-    console.log(post)
     return <div style={{backgroundColor: "greenyellow", marginBottom: "10px"}}>
         <div className="flexRow"><h1>{post.header}</h1>
             {page==='post'&&post.user===user._id&&<FaPencil style={{marginLeft:"5px"}} onClick={() =>

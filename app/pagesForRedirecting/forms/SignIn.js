@@ -82,7 +82,7 @@ export default function SignIn(){
 
             </Formik>
             <button style={{color: "blue",display:"block",margin:"auto"}} onClick={() => changePage("logIn")}>
-                Juz mam konto: LogIn
+                Juz masz konto: LogIn
             </button>
         </div>
     )

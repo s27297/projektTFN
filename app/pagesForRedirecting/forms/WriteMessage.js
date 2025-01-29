@@ -22,9 +22,9 @@ export default function WriteMessage() {
 
     }
     return(
-        <div style={{float:"bottom", border:"solid black 2px"}}>
-            <label><textarea id="input" name="input" {...input} style={{width:"80%"}}></textarea>
-                <button onClick={()=>handleClick(input)}>
+        <div style={{float:"bottom",}}>
+            <label><textarea id="input" name="input" {...input} style={{width:"80%",border:"solid black 2px"}}></textarea>
+                <button style={{backgroundColor:"green",color:"black"}} onClick={()=>handleClick(input)}>
                 wyślij
             </button></label>
         </div>

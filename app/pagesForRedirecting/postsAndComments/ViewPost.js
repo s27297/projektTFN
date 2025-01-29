@@ -10,7 +10,6 @@ import Comment from "@/app/pagesForRedirecting/classes/Comment";
 export default function ViewPost() {
     const {viewPost,getRequests,comments,postRequests,tagged,changeTagged,user,posts}=useContext(GlobalContext);
     const [input,setInput] = useInput("");
-console.log(viewPost)
 //     console.log(user)
     useEffect(() => {
         if(viewPost) {

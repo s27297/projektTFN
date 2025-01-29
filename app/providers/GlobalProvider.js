@@ -87,7 +87,6 @@ const [editCommit,setEditCommit]=useState({});
                 })
                 .then(res => res.json())
                 .then(r => {
-                    console.log(r);
                     if(r.success) {
                         setPage("logIn");
                        // setToken(r.token);
@@ -194,7 +193,6 @@ const [editCommit,setEditCommit]=useState({});
                     break;
                 case "Posts":
                     setLoading(true);
-                    console.log(value)
                     // console.log(`http://localhost:5000/posts?user=${value}`)
                     await fetch(`http://localhost:5000/posts?user=${value}`, {
                         headers: {'Authorization': 'Bearer ' + token},
@@ -217,7 +215,6 @@ const [editCommit,setEditCommit]=useState({});
                         .finally(setLoading(false))
                     break;
                 case "MyPosts":
-                    console.log("qwe")
                     setLoading(true);
                     await fetch(`http://localhost:5000/posts`, {
                         headers: {'Authorization': 'Bearer ' + token},
@@ -255,7 +252,7 @@ const [editCommit,setEditCommit]=useState({});
                                 let commentsWithTags=[]
                                 comments21.map(comment =>{
                                    if (comment.tagged)commentsWithTags.push(comment)})
-                                console.log(commentsWithTags)
+                                // console.log(commentsWithTags)
                                 let commmmmmmmmit = comments21
 
                                 if(commentsWithTags.length>0){
@@ -268,15 +265,15 @@ const [editCommit,setEditCommit]=useState({});
                                             else {
                                                 staryComment.tags.reverse().push(comment);staryComment.tags.reverse()}
                                             commmmmmmmmit.map(c=>c._id===staryComment._id?staryComment:c)
-                                            console.log(staryComment)
+                                            // console.log(staryComment)
                                         }
                                     })
 
                                 }
-                                console.log(viewPost)
+                                // console.log(viewPost)
                                 setViewPost(posts.filter(p=>p._id===viewPost._id)[0])
 
-                                console.log(commmmmmmmmit)
+                                // console.log(commmmmmmmmit)
                                 setComments(commmmmmmmmit.filter(comment => !commentsWithTags.includes(comment)))
                             }
                             else {
@@ -290,7 +287,7 @@ const [editCommit,setEditCommit]=useState({});
                     break;
                 case "Groups":
                     // console.log("rat")\
-                    console.log(users)
+                    // console.log(users)
                     if(!users.length)
                         await getRequests("Users");
 
@@ -350,7 +347,7 @@ const [editCommit,setEditCommit]=useState({});
                         headers: {'Authorization': 'Bearer ' + token},
                     }).then(res => res.json())
                         .then(res => {
-                            console.log(res)
+                            // console.log(res)
                             if (res.success ) {
                                 setTextsForBan(res.data)
                             }
@@ -372,7 +369,7 @@ const [editCommit,setEditCommit]=useState({});
         const postFunction=async (value,type)=> {
             switch (type) {
                 case "Message":
-                    console.log(value)
+                    // console.log(value)
                     await fetch(`http://localhost:5000/messages`, {
                         method: "POST",
                         headers: {'Authorization': 'Bearer ' + token,"Content-Type":"application/json"},
@@ -414,7 +411,7 @@ const [editCommit,setEditCommit]=useState({});
                         body: JSON.stringify(value),
                     }).then(res => res.json())
                         .then(res => {
-                            console.log(res)
+                            // console.log(res)
                             if(res.success) {
                                 changePage("myPosts")
                                 console.log("car")
@@ -426,19 +423,32 @@ const [editCommit,setEditCommit]=useState({});
                         })
                     break;
                 case "comment":
-                    await fetch(`http://localhost:5000/posts/${viewPost._id}/comments`, {
-                        method: "POST",
-                        headers: {'Authorization': 'Bearer ' + token,"Content-Type":"application/json"},
-                        body: JSON.stringify({tagged:tagged._id,text:value}),
-                    }).then(res => res.json())
-                        .then(res => {
-                           console.log(res)
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                    setTagged({})
-                    console.log(page)
+                    // await fetch(`http://localhost:5000/posts/${viewPost._id}/comments`, {
+                    //     method: "POST",
+                    //     headers: {'Authorization': 'Bearer ' + token,"Content-Type":"application/json"},
+                    //     body: JSON.stringify({tagged:tagged._id,text:value}),
+                    // }).then(res => res.json())
+                    //     .then(res => {
+                    //        // console.log(res)
+                    //     })
+                    //     .catch((err) => {
+                    //         console.log(err)
+                    //     })
+                    // setTagged({})
+
+                        await fetch(`http://localhost:8000/${value}`, {
+                            method: "POST",
+                            headers: {'Authorization': 'Bearer ' + token,"Content-Type":"application/json"},
+                            body: JSON.stringify({id:viewPost._id,tagged:tagged._id,text:value}),
+                        }).then(res => res.json())
+                            .then(res => {
+                               // console.log(res)
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
+                        setTagged({})
+                    // console.log(page)
               getRequests("PostComments")
                     break;
                 case "Group":
@@ -448,7 +458,7 @@ const [editCommit,setEditCommit]=useState({});
                         body: JSON.stringify(value),
                     }).then(res => res.json())
                         .then(res => {
-                            console.log(res)
+                            // console.log(res)
                             if(res.success) {
                                 changePage("groups")
                                 // console.log("car")
@@ -466,7 +476,7 @@ const [editCommit,setEditCommit]=useState({});
                         body: JSON.stringify(value),
                     }).then(res => res.json())
                         .then(res => {
-                            console.log(res)
+                            // console.log(res)
                             if(res.success) {
                                 changePage("events")
                                 // console.log("car")
@@ -484,11 +494,27 @@ const [editCommit,setEditCommit]=useState({});
                         body: JSON.stringify(value),
                     }).then(res => res.json())
                         .then(res => {
-                            console.log(res)
+                            // console.log(res)
                             if(res.success) {
                                 alert("your complain was sended succesfully")
                             }
                             else{alert("your complain was not sended succesfully")}
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                    break;
+                case "RefreshUser":
+                    await fetch(`http://localhost:5000/admin/users/${value}`, {
+                        method: "POST",
+                        headers: {'Authorization': 'Bearer ' + token},
+                    }).then(res => res.json())
+                        .then(res => {
+                            // console.log(res)
+                            if(res.success) {
+                                alert("refreshed")
+                            }
+                            else{alert(res.data)}
                         })
                         .catch((err) => {
                             console.log(err)
@@ -523,7 +549,7 @@ const [editCommit,setEditCommit]=useState({});
 
                     break;
                 case "Friend":
-                    console.log("cat")
+                    // console.log("cat")
 
                     await fetch(`http://localhost:5000/friends/${values}`, {
                         method:"PATCH",
@@ -588,7 +614,7 @@ const [editCommit,setEditCommit]=useState({});
                     .finally()
                     break;
                 case "Comment":
-                    console.log("cat")
+                    // console.log("cat")
 
                     await fetch(`http://localhost:5000/posts/${values.id}/comments`, {
                         method:"PUT",
@@ -600,7 +626,7 @@ const [editCommit,setEditCommit]=useState({});
                             if(!res.success)
                                 alert(res.data)
                             else{
-                                console.log(viewPost)
+                                // console.log(viewPost)
                                 setTimeout(()=>setPage("post"),10)
                             }
                         })
@@ -610,7 +636,7 @@ const [editCommit,setEditCommit]=useState({});
                         // .finally(getRequests("Friends"))
                     break;
                 case "Group":
-                    console.log("cat")
+                    // console.log("cat")
 
                     await fetch(`http://localhost:5000/groups/${editGroup._id}`, {
                         method:"PUT",
@@ -632,7 +658,7 @@ const [editCommit,setEditCommit]=useState({});
                     // .finally(getRequests("Friends"))
                     break;
                     case "Add to group":
-                        console.log(values)
+                        // console.log(values)
 
                         await fetch(`http://localhost:5000/groups/${values.id}/members`, {
                             method:"PATCH",
@@ -654,7 +680,7 @@ const [editCommit,setEditCommit]=useState({});
                         .finally()
                         break;
                 case "post":
-                    console.log("cat")
+                    // console.log("cat")
 
                     await fetch(`http://localhost:5000/posts/${values.id}`, {
                         method:"PUT",
@@ -666,7 +692,7 @@ const [editCommit,setEditCommit]=useState({});
                             if(!res.success)
                                 alert(res.data)
                             else{
-                                console.log(viewPost)
+                                // console.log(viewPost)
                                 setTimeout(()=>setPage("myPosts"),10)
                             }
                         })
@@ -716,7 +742,7 @@ const [editCommit,setEditCommit]=useState({});
     //
     const deleteRequests= (type,values=null)=>{
         const deleteFunction=async (values,type)=> {
-            console.log("cat")
+            // console.log("cat")
 
             switch (type) {
                 case "Friend":
@@ -744,7 +770,7 @@ const [editCommit,setEditCommit]=useState({});
                         headers: {'Authorization': 'Bearer ' + token},
                     }).then(res => res.json())
                         .then(res => {
-                            console.log(res)
+                            // console.log(res)
                             if(page==="post")
                                 getRequests("PostComments")
                             else {
@@ -821,11 +847,29 @@ const [editCommit,setEditCommit]=useState({});
 
                     }).then(res => res.json())
                         .then(res => {
-                            console.log(res)
+                            // console.log(res)
                             if(!res.success)
                                 alert(res.data)
                             else
                                 getRequests("textsForBan")
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                    // .finally())
+                    break;
+                case "BanUser":
+                    await fetch(`http://localhost:5000/admin/users/${values}`, {
+                        method:"DELETE",
+                        headers: {'Authorization': 'Bearer ' + token},
+
+                    }).then(res => res.json())
+                        .then(res => {
+                            // console.log(res)
+                            if(!res.success)
+                                alert(res.data)
+                            else
+                                alert("success")
                         })
                         .catch((err) => {
                             console.log(err)
