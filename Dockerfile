@@ -1,15 +1,25 @@
-# Fetching the minified node image on alpine linux
-FROM node:alpine as base
-# Setting up the work directory
-WORKDIR /koty
+ARG PORT=3000
+ARG NODE_VERSION=alpine
+FROM node:${NODE_VERSION}
+RUN apk update && apk add shadow && apk add --no-cache bash  \
+    && apk cache clean
+WORKDIR /application
+COPY package.json package-lock.json ./
+RUN npm install && npm cache clean --force
+COPY . .
+LABEL author="Artem Stakhovski s27297@pjwstk.eu.pl"
+LABEL version="1.0.5"
+LABEL date_creation="01.04.2025"
+LABEL opis="to jest frontend applikacji"
+RUN mkdir .next
+RUN adduser --system --no-create-home newuser
 
-# Copying all the files in our project
-COPY package.json package-lock.json /koty/
-RUN npm install
-#RUN rm -rf node_modules && npm install&& yarn cache clean
-COPY . /koty
+RUN mkdir -p .next && chmod -R 777 .next
 
-CMD [ "npm","run","dev" ]
+USER newuser
+EXPOSE ${PORT}
 
-# Exposing server port
-EXPOSE 3000
+ARG APIURL=http://localhost:5000
+ENV NEXT_PUBLIC_API_URL=$APIURL
+
+CMD [ "npm","run","dev"]
