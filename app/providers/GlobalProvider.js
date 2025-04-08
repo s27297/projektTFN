@@ -2,9 +2,11 @@
 import {useMemo, useReducer, useState} from "react";
 import{createContext} from "react";
 import {useInput} from "@/app/hooks/useInput";
+import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 
 export const GlobalContext = createContext();
-
+// const API_URL="http://localhost:5000";
+const API_URL=process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 export default function GlobalProvider({ children }) {
     const [users,setUsers]=useState([]);
     const [filteredUsers,setFilteredUsers]=useState([]);
@@ -43,7 +45,7 @@ const [editCommit,setEditCommit]=useState({});
     const logIn=(values)=>{
         // console.log(token)
         const zaloguj=async (values) => {
-             await fetch(`http://localhost:5000/auth/login`,
+             await fetch(`${API_URL}/auth/login`,
                 {
                     method: "POST",
                     body: JSON.stringify(values),
@@ -79,7 +81,7 @@ const [editCommit,setEditCommit]=useState({});
 
     const signIn=async(values)=>{
         const sign=async (values) => {
-            await fetch(`http://localhost:5000/users/register`,
+            await fetch(`${API_URL}/users/register`,
                 {
                     method: "POST",
                     body: JSON.stringify(values),
@@ -115,7 +117,7 @@ const [editCommit,setEditCommit]=useState({});
                 case "Messages":
                     if(!users.length )getRequests("Users")
                     setLoading(true);
-                    await fetch(`http://localhost:5000/messages/users`, {
+                    await fetch(`${API_URL}/messages/users`, {
                         headers: {'Authorization': 'Bearer ' + token},
                         // body: JSON.stringify({to:messageTo}),
                     }).then(res => res.json())
@@ -132,7 +134,7 @@ const [editCommit,setEditCommit]=useState({});
                     break;
                 case "Users":
                     setLoading(true);
-                    await fetch(`http://localhost:5000/users/all`, {
+                    await fetch(`${API_URL}/users/all`, {
                         headers: {'Authorization': 'Bearer ' + token},
                     }).then(res => res.json())
                         .then(res => {
@@ -149,7 +151,7 @@ const [editCommit,setEditCommit]=useState({});
                     case "Friends":
                         // console.log("rat")
                     setLoading(true);
-                    await fetch(`http://localhost:5000/friends`, {
+                    await fetch(`${API_URL}/friends`, {
                         headers: {'Authorization': 'Bearer ' + token},
                     }).then(res => res.json())
                         .then(res => {
@@ -170,7 +172,7 @@ const [editCommit,setEditCommit]=useState({});
                 case "User":
                     // console.log(value)
                     setLoading(true);
-                    await fetch(`http://localhost:5000/users/${viewUserProfile._id}/profile`, {
+                    await fetch(`${API_URL}/users/${viewUserProfile._id}/profile`, {
                         headers: {'Authorization': 'Bearer ' + token},
                     }).then(res => res.json())
                         .then(res => {
@@ -193,8 +195,8 @@ const [editCommit,setEditCommit]=useState({});
                     break;
                 case "Posts":
                     setLoading(true);
-                    // console.log(`http://localhost:5000/posts?user=${value}`)
-                    await fetch(`http://localhost:5000/posts?user=${value}`, {
+                    // console.log(`${API_URL}/posts?user=${value}`)
+                    await fetch(`${API_URL}/posts?user=${value}`, {
                         headers: {'Authorization': 'Bearer ' + token},
 
                     }).then(res => res.json())
@@ -216,7 +218,7 @@ const [editCommit,setEditCommit]=useState({});
                     break;
                 case "MyPosts":
                     setLoading(true);
-                    await fetch(`http://localhost:5000/posts`, {
+                    await fetch(`${API_URL}/posts`, {
                         headers: {'Authorization': 'Bearer ' + token},
 
                     }).then(res => res.json())
@@ -240,7 +242,7 @@ const [editCommit,setEditCommit]=useState({});
                 case "PostComments":
                     // console.log("cat")
 
-                    await fetch(`http://localhost:5000/posts/${viewPost._id}/comments`, {
+                    await fetch(`${API_URL}/posts/${viewPost._id}/comments`, {
                         headers: {'Authorization': 'Bearer ' + token},
 
                     }).then(res => res.json())
@@ -292,7 +294,7 @@ const [editCommit,setEditCommit]=useState({});
                         await getRequests("Users");
 
                     setLoading(true);
-                    await fetch(`http://localhost:5000/groups`, {
+                    await fetch(`${API_URL}/groups`, {
                         headers: {'Authorization': 'Bearer ' + token},
                     }).then(res => res.json())
                         .then(async res => {
@@ -311,7 +313,7 @@ const [editCommit,setEditCommit]=useState({});
                     break;
                 case "Events":
                     setLoading(true);
-                    await fetch(`http://localhost:5000/events`, {
+                    await fetch(`${API_URL}/events`, {
                         headers: {'Authorization': 'Bearer ' + token},
                     }).then(res => res.json())
                         .then(res => {
@@ -327,7 +329,7 @@ const [editCommit,setEditCommit]=useState({});
                     break;
                 case "Reports":
                     setLoading(true);
-                    await fetch(`http://localhost:5000/admin/reports`, {
+                    await fetch(`${API_URL}/admin/reports`, {
                         headers: {'Authorization': 'Bearer ' + token},
                     }).then(res => res.json())
                         .then(res => {
@@ -343,7 +345,7 @@ const [editCommit,setEditCommit]=useState({});
                     break;
                 case "textsForBan":
                     setLoading(true);
-                    await fetch(`http://localhost:5000/banned`, {
+                    await fetch(`${API_URL}/banned`, {
                         headers: {'Authorization': 'Bearer ' + token},
                     }).then(res => res.json())
                         .then(res => {
@@ -370,7 +372,7 @@ const [editCommit,setEditCommit]=useState({});
             switch (type) {
                 case "Message":
                     // console.log(value)
-                    await fetch(`http://localhost:5000/messages`, {
+                    await fetch(`${API_URL}/messages`, {
                         method: "POST",
                         headers: {'Authorization': 'Bearer ' + token,"Content-Type":"application/json"},
                         body: JSON.stringify(value),
@@ -387,7 +389,7 @@ const [editCommit,setEditCommit]=useState({});
                         )
                     break;
                 case "Add to friends":
-                    await fetch(`http://localhost:5000/friends`, {
+                    await fetch(`${API_URL}/friends`, {
                         method: "POST",
                         headers: {'Authorization': 'Bearer ' + token,"Content-Type":"application/json"},
                         body: JSON.stringify({login:value}),
@@ -405,7 +407,7 @@ const [editCommit,setEditCommit]=useState({});
                         })
                     break;
                 case "Post":
-                    await fetch(`http://localhost:5000/posts`, {
+                    await fetch(`${API_URL}/posts`, {
                         method: "POST",
                         headers: {'Authorization': 'Bearer ' + token,"Content-Type":"application/json"},
                         body: JSON.stringify(value),
@@ -423,7 +425,7 @@ const [editCommit,setEditCommit]=useState({});
                         })
                     break;
                 case "comment":
-                    // await fetch(`http://localhost:5000/posts/${viewPost._id}/comments`, {
+                    // await fetch(`${API_URL}/posts/${viewPost._id}/comments`, {
                     //     method: "POST",
                     //     headers: {'Authorization': 'Bearer ' + token,"Content-Type":"application/json"},
                     //     body: JSON.stringify({tagged:tagged._id,text:value}),
@@ -452,7 +454,7 @@ const [editCommit,setEditCommit]=useState({});
               getRequests("PostComments")
                     break;
                 case "Group":
-                    await fetch(`http://localhost:5000/groups`, {
+                    await fetch(`${API_URL}/groups`, {
                         method: "POST",
                         headers: {'Authorization': 'Bearer ' + token,"Content-Type":"application/json"},
                         body: JSON.stringify(value),
@@ -470,7 +472,7 @@ const [editCommit,setEditCommit]=useState({});
                         })
                     break;
                 case "Event":
-                    await fetch(`http://localhost:5000/events`, {
+                    await fetch(`${API_URL}/events`, {
                         method: "POST",
                         headers: {'Authorization': 'Bearer ' + token,"Content-Type":"application/json"},
                         body: JSON.stringify(value),
@@ -488,7 +490,7 @@ const [editCommit,setEditCommit]=useState({});
                         })
                     break;
                 case "Complain":
-                    await fetch(`http://localhost:5000/banned/`, {
+                    await fetch(`${API_URL}/banned/`, {
                         method: "POST",
                         headers: {'Authorization': 'Bearer ' + token,"Content-Type":"application/json"},
                         body: JSON.stringify(value),
@@ -505,7 +507,7 @@ const [editCommit,setEditCommit]=useState({});
                         })
                     break;
                 case "RefreshUser":
-                    await fetch(`http://localhost:5000/admin/users/${value}`, {
+                    await fetch(`${API_URL}/admin/users/${value}`, {
                         method: "POST",
                         headers: {'Authorization': 'Bearer ' + token},
                     }).then(res => res.json())
@@ -530,7 +532,7 @@ const [editCommit,setEditCommit]=useState({});
             // console.log(values)
             switch (type) {
                 case "User Profile":
-                    await fetch(`http://localhost:5000/users/${viewUserProfile._id}/profile`,
+                    await fetch(`${API_URL}/users/${viewUserProfile._id}/profile`,
                     {
                         method: "PUT",
                         body: JSON.stringify(values),
@@ -551,7 +553,7 @@ const [editCommit,setEditCommit]=useState({});
                 case "Friend":
                     // console.log("cat")
 
-                    await fetch(`http://localhost:5000/friends/${values}`, {
+                    await fetch(`${API_URL}/friends/${values}`, {
                         method:"PATCH",
                         headers: {'Authorization': 'Bearer ' + token},
                     }).then(res => res.json())
@@ -570,7 +572,7 @@ const [editCommit,setEditCommit]=useState({});
                     // console.log("cat")
                     // values=!darkMode
                     // console.log(values)
-                    await fetch(`http://localhost:5000/users/${user._id}/settings`, {
+                    await fetch(`${API_URL}/users/${user._id}/settings`, {
                         method:"PATCH",
                         headers: {'Authorization': 'Bearer ' + token,"Content-Type":"application/json"},
                         body: JSON.stringify({darkmode:values}),
@@ -592,7 +594,7 @@ const [editCommit,setEditCommit]=useState({});
                 case "AddLike":
                     // console.log("cat")
                     // values=!darkMode
-                    await fetch(`http://localhost:5000/posts/${values}/likes`, {
+                    await fetch(`${API_URL}/posts/${values}/likes`, {
                         method:"PUT",
                         headers: {'Authorization': 'Bearer ' + token,"Content-Type":"application/json"},
                         body: JSON.stringify({tryToLike:values}),
@@ -616,7 +618,7 @@ const [editCommit,setEditCommit]=useState({});
                 case "Comment":
                     // console.log("cat")
 
-                    await fetch(`http://localhost:5000/posts/${values.id}/comments`, {
+                    await fetch(`${API_URL}/posts/${values.id}/comments`, {
                         method:"PUT",
                         headers: {'Authorization': 'Bearer ' + token,"content-type":"application/json"},
                         body: JSON.stringify({text:values.text}),
@@ -638,7 +640,7 @@ const [editCommit,setEditCommit]=useState({});
                 case "Group":
                     // console.log("cat")
 
-                    await fetch(`http://localhost:5000/groups/${editGroup._id}`, {
+                    await fetch(`${API_URL}/groups/${editGroup._id}`, {
                         method:"PUT",
                         headers: {'Authorization': 'Bearer ' + token,"content-type":"application/json"},
                         body: JSON.stringify(values),
@@ -660,7 +662,7 @@ const [editCommit,setEditCommit]=useState({});
                     case "Add to group":
                         // console.log(values)
 
-                        await fetch(`http://localhost:5000/groups/${values.id}/members`, {
+                        await fetch(`${API_URL}/groups/${values.id}/members`, {
                             method:"PATCH",
                             headers: {'Authorization': 'Bearer ' + token,"content-type":"application/json"},
                             body: JSON.stringify({member:values.member}),
@@ -682,7 +684,7 @@ const [editCommit,setEditCommit]=useState({});
                 case "post":
                     // console.log("cat")
 
-                    await fetch(`http://localhost:5000/posts/${values.id}`, {
+                    await fetch(`${API_URL}/posts/${values.id}`, {
                         method:"PUT",
                         headers: {'Authorization': 'Bearer ' + token,"content-type":"application/json"},
                         body: JSON.stringify(values),
@@ -702,7 +704,7 @@ const [editCommit,setEditCommit]=useState({});
                     // .finally(getRequests("Friends"))
                     break;
                 case "attend in event":
-                    await fetch(`http://localhost:5000/events/${values.id}/attendees`, {
+                    await fetch(`${API_URL}/events/${values.id}/attendees`, {
                         method:"PATCH",
                         headers: {'Authorization': 'Bearer ' + token,"content-type":"application/json"},
                         body: JSON.stringify(values),
@@ -719,7 +721,7 @@ const [editCommit,setEditCommit]=useState({});
                         })
                     break;
                 case "Event":
-                    await fetch(`http://localhost:5000/events/${values.id}`, {
+                    await fetch(`${API_URL}/events/${values.id}`, {
                         method:"PUT",
                         headers: {'Authorization': 'Bearer ' + token,"content-type":"application/json"},
                         body: JSON.stringify(values),
@@ -748,7 +750,7 @@ const [editCommit,setEditCommit]=useState({});
                 case "Friend":
                     // console.log("cat")
 
-                    await fetch(`http://localhost:5000/friends/${values}`, {
+                    await fetch(`${API_URL}/friends/${values}`, {
                         method:"DELETE",
                         headers: {'Authorization': 'Bearer ' + token},
                     }).then(res => res.json())
@@ -765,7 +767,7 @@ const [editCommit,setEditCommit]=useState({});
                     break;
                 case "comment":
 
-                    await fetch(`http://localhost:5000/posts/${values}/comments`, {
+                    await fetch(`${API_URL}/posts/${values}/comments`, {
                         method:"DELETE",
                         headers: {'Authorization': 'Bearer ' + token},
                     }).then(res => res.json())
@@ -788,7 +790,7 @@ const [editCommit,setEditCommit]=useState({});
 
                 case "member":
 
-                    await fetch(`http://localhost:5000/groups/${values.id}/members`, {
+                    await fetch(`${API_URL}/groups/${values.id}/members`, {
                         method:"DELETE",
                         headers: {'Authorization': 'Bearer ' + token,'content-type': 'application/json'},
                         body: JSON.stringify(values),
@@ -806,7 +808,7 @@ const [editCommit,setEditCommit]=useState({});
                     break;
                 case "post":
 
-                    await fetch(`http://localhost:5000/posts/${values}`, {
+                    await fetch(`${API_URL}/posts/${values}`, {
                         method:"DELETE",
                         headers: {'Authorization': 'Bearer ' + token},
 
@@ -824,7 +826,7 @@ const [editCommit,setEditCommit]=useState({});
                     break;
                 case "Event":
 
-                    await fetch(`http://localhost:5000/events/${values}`, {
+                    await fetch(`${API_URL}/events/${values}`, {
                         method:"DELETE",
                         headers: {'Authorization': 'Bearer ' + token},
 
@@ -841,7 +843,7 @@ const [editCommit,setEditCommit]=useState({});
                     // .finally())
                     break;
                 case "TextForBan":
-                    await fetch(`http://localhost:5000/banned/${values}`, {
+                    await fetch(`${API_URL}/banned/${values}`, {
                         method:"DELETE",
                         headers: {'Authorization': 'Bearer ' + token},
 
@@ -859,7 +861,7 @@ const [editCommit,setEditCommit]=useState({});
                     // .finally())
                     break;
                 case "BanUser":
-                    await fetch(`http://localhost:5000/admin/users/${values}`, {
+                    await fetch(`${API_URL}/admin/users/${values}`, {
                         method:"DELETE",
                         headers: {'Authorization': 'Bearer ' + token},
 
